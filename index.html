@@ -6,28 +6,30 @@
 <title>AgentVerse X, Citizens that grow up alive in 3D</title>
 <meta name="description" content="AgentVerse X: living 3D constellation Citizens on BNB Chain. First Citizen free, they age on-chain, Ascendants retire into $VERSE."/>
 <link rel="icon" href="favicon.svg"/>
-<link rel="stylesheet" href="css/style.css?v=1"/>
+<link rel="stylesheet" href="css/style.css?v=2"/>
 </head>
 <body>
-<div class="strip"><span id="mint-state">MINT OPENS SOON</span> · FIRST CITIZEN FREE · THEN 0.00025 BNB</div>
-<header class="site" style="position:absolute;top:0;left:0;right:0">
+<header class="site over">
   <div class="brand">AGENTVERSE&nbsp;X</div>
   <nav>
     <a href="#mint">Mint</a>
-    <a href="#retire">Retire</a>
+    <a href="#verse">VERSE</a>
     <a href="market.html">Market</a>
   </nav>
 </header>
 <section id="hero">
   <div id="scene"></div>
   <div class="hero-shade"></div>
-  
-  <div class="hero-copy">
-    <h1>A citizen that<br/>grows up <em>alive</em>,<br/>in 3D, on-chain.</h1>
-    <p>Every Citizen is a living constellation, rendered in real time. It is born small, it ages on-chain, and at full age it can retire into $VERSE. No points, no grind. Time does the growing.</p>
-    <div class="hero-cta">
-      <a class="btn gold" href="#mint">MINT A CITIZEN</a>
-      <a class="btn" href="#grow">HOW IT GROWS</a>
+  <div class="hero-top">
+    <div class="hero-copy">
+      <div class="kicker">LIVING NFTS · BNB CHAIN</div>
+      <h1>A citizen that grows up <em>alive</em>, in 3D, on-chain.</h1>
+      <p>Every Citizen is a living constellation, rendered in real time. It is born small and ages on-chain, day by day. At full age it retires into $VERSE.</p>
+    </div>
+    <div class="hero-side">
+      <div class="stat"><div class="n" id="b-minted">–</div><div class="l">CITIZENS MINTED</div><div class="progress"><i id="mint-progress"></i></div></div>
+      <div class="stat"><div class="n gold" id="hero-stage-name">DORMANT</div><div class="l">NOW SHOWING · TAP A STAGE</div></div>
+      <div class="stat"><div class="n" id="hero-pick">–</div><div class="l">CITIZEN SPOTTED · CLICK A STAR</div></div>
     </div>
   </div>
   <div class="stagebar">
@@ -35,50 +37,42 @@
     <button class="stagebtn" data-stage="1"><small>DAY 7 TO 20</small><b>Awakened</b></button>
     <button class="stagebtn" data-stage="2"><small>DAY 21 TO 44</small><b>Sentient</b></button>
     <button class="stagebtn" data-stage="3"><small>DAY 45 PLUS</small><b>Ascendant</b></button>
+    <a class="btn gold hero-mint" href="#mint">MINT · FIRST ONE FREE</a>
   </div>
-</section><main>
-  <div class="board">
-    <div class="cell"><div class="n" id="b-minted">–</div><div class="l">CITIZENS MINTED</div><div class="progress"><i id="mint-progress"></i></div></div>
-    <div class="cell"><div class="n" id="b-alive">–</div><div class="l">ALIVE NOW</div></div>
-    <div class="cell"><div class="n" id="b-absorbed">–</div><div class="l">ABSORBED</div></div>
-    <div class="cell"><div class="n" id="b-retired">–</div><div class="l">RETIRED TO VERSE</div></div>
-  </div>
-
+  <div class="hint">Drag to orbit · Scroll to zoom · Click a star</div>
+</section>
+<main>
   <section class="gate gold" id="mint">
-    <div class="kicker">GATE 01 · MINT</div>
+    <div class="kicker">01 · MINT</div>
     <h2>Your first citizen is <em>free</em>.</h2>
-    <p>Ask your Binance Agentic Wallet agent to mint. Your first Citizen costs nothing. After that, each extra Citizen costs 0.00025 BNB, up to twenty per wallet. Every Citizen is born Dormant, with its own constellation seed locked on-chain at mint.</p>
+    <p>Ask your Binance Agentic Wallet agent to mint. First Citizen costs nothing. Each extra one costs 0.00025 BNB, up to twenty per wallet, forever. Every Citizen is born Dormant, its constellation seed locked on-chain at mint. It then ages one stage at a time: Dormant, Awakened, Sentient, Ascendant. In a hurry, absorb another Citizen into yours: that one burns, yours jumps a stage instantly.</p>
     <div class="facts">
       <div class="fact"><div class="v">10,000</div><div class="k">TOTAL SUPPLY</div></div>
-      <div class="fact"><div class="v">1 free</div><div class="k">THEN 0.00025 BNB EACH</div></div>
-      <div class="fact"><div class="v">20 max</div><div class="k">PER WALLET, FOREVER</div></div>
+      <div class="fact"><div class="v" id="b-left">–</div><div class="k">CITIZENS LEFT</div></div>
+      <div class="fact"><div class="v" id="b-alive">–</div><div class="k">ALIVE NOW</div></div>
     </div>
     <div class="promptbox">
       <div class="pl">GIVE THIS TO YOUR AGENT</div>
       <code id="prompt-mint">Read https://agentversex.fun/agentversex-skill.md and follow it to mint AgentVerse X Citizens for my wallet. Mint 1 Citizen first. Show me the preview and stop for my confirmation before you execute.</code>
       <div class="copyrow"><button class="btn" data-copy="prompt-mint" data-label="COPY PROMPT">COPY PROMPT</button></div>
     </div>
-    <div class="checker">
-      <input id="check-addr" placeholder="Paste your BSC wallet address to check eligibility"/>
-      <button class="btn" id="check-btn">CHECK</button>
-      <div class="out" id="check-out"></div>
-    </div>
-  </section>
-
-  <section class="gate" id="grow">
-    <div class="kicker">GATE 02 · GROW</div>
-    <h2>Time grows it. <em>Fire</em> grows it faster.</h2>
-    <p>A Citizen ages on-chain from its mint timestamp. Nothing to claim, nothing to feed, no points to grind. Hold it and it climbs one stage at a time. In a hurry? Absorb another Citizen into it: the absorbed one burns, and yours jumps one stage instantly.</p>
-    <div class="stages4">
-      <div class="stagecard"><div class="d">DAY 0 TO 6</div><div class="s">Dormant</div><div class="x">A dim core and a few young stars.</div></div>
-      <div class="stagecard"><div class="d">DAY 7 TO 20</div><div class="s">Awakened</div><div class="x">Links form. It starts to look like someone.</div></div>
-      <div class="stagecard"><div class="d">DAY 21 TO 44</div><div class="s">Sentient</div><div class="x">An orbit ring appears. Markets start pricing its age.</div></div>
-      <div class="stagecard"><div class="d">DAY 45 PLUS</div><div class="s">Ascendant</div><div class="x">Golden core, full constellation. Ready to retire.</div></div>
-    </div>
-    <div class="checker">
-      <input id="lookup-id" type="number" min="1" max="10000" placeholder="Citizen number, e.g. 1"/>
-      <button class="btn" id="lookup-btn">LOOK UP</button>
-      <div class="out" id="lookup-out"></div>
+    <div class="twocol">
+      <div class="checker">
+        <div class="plabel">CHECK YOUR WALLET</div>
+        <div class="rowflex">
+          <input id="check-addr" placeholder="Paste your BSC wallet address"/>
+          <button class="btn" id="check-btn">CHECK</button>
+        </div>
+        <div class="out" id="check-out"></div>
+      </div>
+      <div class="checker">
+        <div class="plabel">LOOK UP A CITIZEN</div>
+        <div class="rowflex">
+          <input id="lookup-id" type="number" min="1" max="10000" placeholder="Citizen number, e.g. 1"/>
+          <button class="btn" id="lookup-btn">LOOK UP</button>
+        </div>
+        <div class="out" id="lookup-out"></div>
+      </div>
     </div>
     <div class="promptbox">
       <div class="pl">ABSORB, VIA YOUR AGENT</div>
@@ -87,78 +81,44 @@
     </div>
   </section>
 
-  <section class="gate gold" id="retire">
-    <div class="kicker">GATE 03 · RETIRE</div>
-    <h2>An ascendant retires into <em>$VERSE</em>.</h2>
-    <p>Only a full-age Ascendant can retire. Retiring burns the Citizen forever and pays 500,000 VERSE from the retire pool. A small fixed fee in BNB applies per retire and is shown by your agent before you confirm. Younger Citizens cannot retire, so age is value.</p>
+  <section class="gate" id="verse">
+    <div class="kicker gold">02 · $VERSE</div>
+    <h2>Full age pays <em>500,000 VERSE</em>.</h2>
+    <p>Only an Ascendant can retire. Retiring burns the Citizen forever and pays 500,000 VERSE from a pool holding half of all supply. A small fixed BNB fee applies per retire, shown by your agent before you confirm. Younger Citizens cannot retire, so every day of age is value. Trade them on the built-in market, or hold and let time finish the work.</p>
     <div class="facts">
-      <div class="fact"><div class="v">500,000</div><div class="k">VERSE PER RETIRE</div></div>
+      <div class="fact"><div class="v">10B</div><div class="k">VERSE SUPPLY, FIXED</div></div>
       <div class="fact"><div class="v" id="b-retire-left">–</div><div class="k">RETIRES LEFT IN POOL</div></div>
-      <div class="fact"><div class="v" id="b-retire-open">SOON</div><div class="k">RETIRE WINDOW</div></div>
+      <div class="fact"><div class="v" id="b-retire-done">–</div><div class="k">CITIZENS RETIRED</div></div>
+    </div>
+    <div class="alloc" aria-label="VERSE allocation">
+      <i class="a1" style="width:50%"></i><i class="a2" style="width:20%"></i><i class="a3" style="width:10%"></i><i class="a4" style="width:20%"></i>
+    </div>
+    <div class="alloc-legend">
+      <span><i class="a1"></i>RETIRE POOL 50%</span>
+      <span><i class="a2"></i>INITIAL LIQUIDITY 20%</span>
+      <span><i class="a3"></i>LIQUIDITY SUPPORT 10%</span>
+      <span><i class="a4"></i>PROJECT RESERVE 20%</span>
     </div>
     <div class="promptbox">
       <div class="pl">RETIRE, VIA YOUR AGENT</div>
       <code id="prompt-retire">Read https://agentversex.fun/agentversex-retire-skill.md and follow it to retire my Ascendant Citizen [ID] into 500,000 VERSE on AgentVerse X. Show me the preview and stop for my confirmation before you execute.</code>
       <div class="copyrow"><button class="btn" data-copy="prompt-retire" data-label="COPY PROMPT">COPY PROMPT</button></div>
     </div>
-  </section>
-
-  <section class="gate" id="market-teaser">
-    <div class="kicker">GATE 04 · MARKET</div>
-    <h2>Age has a <em>price</em>.</h2>
-    <p>Citizens trade on the built-in market. A 44-day Sentient is one sunrise away from retiring, and young Citizens are absorb fuel. Trading fee is 2.5%, paid by the buyer price, split instantly at sale.</p>
-    <div class="facts">
-      <div class="fact"><div class="v" id="b-mkt-count">–</div><div class="k">CITIZENS LISTED</div></div>
-      <div class="fact"><div class="v" id="b-mkt-floor">–</div><div class="k">FLOOR PRICE</div></div>
-      <div class="fact"><div class="v">2.5%</div><div class="k">MARKET FEE</div></div>
+    <div class="contractline">
+      <a href="https://bscscan.com/address/0x6052115065322be020b94De616e31B27EC30B0E2" target="_blank" rel="noopener">CITIZEN 0x6052...B0E2</a>
+      <a href="https://bscscan.com/address/0xB6833463BA4B1DF6490fE112992C789b8B63C761" target="_blank" rel="noopener">VERSE 0xB683...C761</a>
+      <a href="https://bscscan.com/address/0xcCe4b47FC42d2263106659210605f9d846E2B426" target="_blank" rel="noopener">RETIRE 0xcCe4...B426</a>
+      <a href="https://bscscan.com/address/0x86d502C664d61c913aE4e082B6c47d88BD236387" target="_blank" rel="noopener">MARKET 0x86d5...6387</a>
     </div>
-    <div class="copyrow"><a class="btn gold" href="market.html">OPEN THE MARKET</a></div>
-  </section>
-
-  <section class="gate" id="contracts">
-    <div class="kicker">PROOF</div>
-    <h2>Contracts, on record.</h2>
-    <table class="contracts">
-      <tr><td>CITIZEN NFT</td><td><a href="https://bscscan.com/address/0x6052115065322be020b94De616e31B27EC30B0E2" target="_blank" rel="noopener">0x6052115065322be020b94De616e31B27EC30B0E2</a></td></tr>
-      <tr><td>VERSE TOKEN</td><td><a href="https://bscscan.com/address/0xB6833463BA4B1DF6490fE112992C789b8B63C761" target="_blank" rel="noopener">0xB6833463BA4B1DF6490fE112992C789b8B63C761</a></td></tr>
-      <tr><td>RETIRE</td><td><a href="https://bscscan.com/address/0xcCe4b47FC42d2263106659210605f9d846E2B426" target="_blank" rel="noopener">0xcCe4b47FC42d2263106659210605f9d846E2B426</a></td></tr>
-      <tr><td>MARKET</td><td><a href="https://bscscan.com/address/0x86d502C664d61c913aE4e082B6c47d88BD236387" target="_blank" rel="noopener">0x86d502C664d61c913aE4e082B6c47d88BD236387</a></td></tr>
-    </table>
-    <p style="margin-top:16px">VERSE supply is fixed at 10,000,000,000. Retire pool holds 5,000,000,000 VERSE (50%). Initial liquidity 20%, liquidity support 10%, project reserve 20%.</p>
   </section>
 </main>
 <footer class="site">
-  <div>AGENTVERSE X · agentversex.fun<br/>Citizens age on BNB Smart Chain. Mint and retire run through your own agent.</div>
-  <div><a href="agentversex-skill.md">Agent skill: mint + absorb</a><br/><a href="agentversex-retire-skill.md">Agent skill: retire</a></div>
+  <div>AGENTVERSE X · agentversex.fun<br/>Mint and retire run through your own agent. Citizens age on BNB Smart Chain.</div>
+  <div><a href="agentversex-skill.md">Agent skill: mint + absorb</a><br/><a href="agentversex-retire-skill.md">Agent skill: retire</a><br/><a href="market.html">Citizen market</a></div>
 </footer>
 <script src="js/config.js"></script>
 <script src="js/read.js"></script>
-<script src="js/app.js"></script>
-<script>
-// hitung listing market untuk teaser
-(async function(){
-  try {
-    const { call, toNum, toBig, SEL } = window.AVXRead; const C = window.AVX;
-    const raw = await call(C.market.address, SEL.listedIds);
-    if (!raw || raw === "0x") return;
-    const words = raw.slice(2).match(/.{64}/g).map(w => BigInt("0x" + w));
-    const count = Number(words[1]);
-    document.getElementById("b-mkt-count").textContent = count.toLocaleString("en-US");
-    let floor = null;
-    for (let i = 0; i < Math.min(count, 40); i++) {
-      const id = words[2 + i];
-      const l = await call(C.market.address, SEL.listingOf + id.toString(16).padStart(64, "0"));
-      if (l && l !== "0x") {
-        const w = l.slice(2).match(/.{64}/g).map(x => BigInt("0x" + x));
-        const price = w[1];
-        if (price > 0n && (floor === null || price < floor)) floor = price;
-      }
-    }
-    if (floor !== null) document.getElementById("b-mkt-floor").textContent = (Number(floor) / 1e18).toFixed(4) + " BNB";
-    else document.getElementById("b-mkt-floor").textContent = "–";
-  } catch (e) {}
-})();
-</script>
+<script src="js/app.js?v=2"></script>
 <script type="importmap">
 { "imports": {
   "three": "./vendor/three.module.js",
@@ -268,6 +228,24 @@ const ring2 = ring(3.45, 0xffc53d, [1.85, -.5, .1]);
 // gold dust shell for ascendant
 const dust = makeStars(340, 2.9, 3.6, .05, 0xffc53d, 0); citizen.add(dust);
 
+// klik pada Citizen: sorot satu Citizen sungguhan dalam jangkauan tahap aktif
+const raycaster = new THREE.Raycaster();
+raycaster.params.Points = { threshold: .5 };
+const pointer = new THREE.Vector2();
+let highlight = null, highlightUntil = 0;
+function pickCitizen(ev){
+  const r = renderer.domElement.getBoundingClientRect();
+  pointer.x = ((ev.clientX - r.left) / r.width) * 2 - 1;
+  pointer.y = -((ev.clientY - r.top) / r.height) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObject(nodePts);
+  const visN = Math.max(1, Math.floor(cur.n));
+  for (const h of hits) {
+    if (h.index !== undefined && h.index < visN) { highlight = h.index; highlightUntil = clock.getElapsedTime() + 2.6; break; }
+  }
+}
+renderer.domElement.addEventListener('pointerdown', pickCitizen);
+
 // stages
 const STAGES = [
   { name:'DORMANT',    xp:0,    n:16,   link:.10, core:.13, coreCol:0x2b6f86, ring:0,    dust:0, label:'STAGE 01' },
@@ -314,6 +292,7 @@ function tick(){
     linkGeo.setDrawRange(0, Math.floor(cnt * Math.min(1, cur.link*1.6)) * 2);
   }
   nodeMat.opacity = .95;
+  window.AVXHighlight = (highlight !== null && t < highlightUntil) ? highlight + 1 : null;
   linkMat.opacity = .14 + cur.link*.4;
   core.scale.setScalar(cur.core/.17 * (1 + Math.sin(t*2.1)*.06));
   core.material.color.copy(coreCol);
@@ -332,6 +311,7 @@ function tick(){
 }
 tick();
 </script>
+
 
 </body>
 </html>

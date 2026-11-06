@@ -116,3 +116,11 @@
     } catch (e) { out.textContent = "Chain read failed. Try again in a moment."; }
   });
 })();
+
+  // ---------- sorotan Citizen dari scene 3D ----------
+  setInterval(() => {
+    const el = document.getElementById("hero-pick");
+    if (!el) return;
+    const v = window.AVXHighlight;
+    el.textContent = v ? "N\u00ba " + v : "\u2013";
+  }, 350);
