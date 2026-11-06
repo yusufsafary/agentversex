@@ -6,7 +6,7 @@
 <title>AgentVerse X, Citizens that grow up alive in 3D</title>
 <meta name="description" content="AgentVerse X: living 3D constellation Citizens on BNB Chain. First Citizen free, they age on-chain, Ascendants retire into $VERSE."/>
 <link rel="icon" href="favicon.svg"/>
-<link rel="stylesheet" href="css/style.css?v=2"/>
+<link rel="stylesheet" href="css/style.css?v=3"/>
 </head>
 <body>
 <header class="site over">
@@ -149,6 +149,8 @@ camera.position.set(isNarrow ? 0 : 2.6, 0.6, isNarrow ? 13.5 : 9.2);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = .06;
 controls.enablePan = false; controls.minDistance = 6; controls.maxDistance = 13;
+controls.touches = {}; // sentuhan tidak ditangkap: halaman selalu bisa digulir; orbit memakai tetikus di desktop
+renderer.domElement.style.touchAction = 'pan-y'; // OrbitControls memasang 'none' saat dibuat; kembalikan agar gulir vertikal di HP jalan
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 controls.autoRotate = !reducedMotion; controls.autoRotateSpeed = .55;
 
@@ -244,7 +246,11 @@ function pickCitizen(ev){
     if (h.index !== undefined && h.index < visN) { highlight = h.index; highlightUntil = clock.getElapsedTime() + 2.6; break; }
   }
 }
-renderer.domElement.addEventListener('pointerdown', pickCitizen);
+let downX = 0, downY = 0;
+renderer.domElement.addEventListener('pointerdown', (ev) => { downX = ev.clientX; downY = ev.clientY; });
+renderer.domElement.addEventListener('pointerup', (ev) => {
+  if (Math.hypot(ev.clientX - downX, ev.clientY - downY) < 7) pickCitizen(ev);
+});
 
 // stages
 const STAGES = [
@@ -266,7 +272,7 @@ window.AVXStage = function(i){
 window.AVXStage(0);
 
 addEventListener('resize', ()=>{
-  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  camera.aspect = wrap.clientWidth/wrap.clientHeight; camera.updateProjectionMatrix();
   renderer.setSize(wrap.clientWidth, wrap.clientHeight);
 });
 

@@ -39,8 +39,8 @@ header.site nav a:hover { border-color: var(--gold); }
 
 /* HERO */
 #hero { position: relative; min-height: 100svh; overflow: hidden; }
-#scene { position: absolute; inset: 0; }
-#scene canvas { display: block; }
+#scene { position: absolute; inset: 0; touch-action: pan-y; }
+#scene canvas { display: block; touch-action: pan-y; }
 .hero-shade { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 68% 45%, transparent 46%, rgba(3, 4, 12, .62) 100%), linear-gradient(180deg, rgba(5,6,15,.25), transparent 30%, transparent 72%, var(--void)); }
 .hero-copy { position: relative; z-index: 5; max-width: 640px; pointer-events: none; }
 .hero-top { position: relative; z-index: 5; display: flex; justify-content: space-between; align-items: flex-start; gap: 28px; padding: 118px 34px 26px; pointer-events: none; }
@@ -149,7 +149,18 @@ footer.site { max-width: 1180px; margin: 0 auto; padding: 34px; color: var(--mut
   .hero-side .stat { flex: 1 1 150px; }
   .twocol { grid-template-columns: 1fr; }
   .hint { display: none; }
-  .btn.hero-mint { margin-left: 0; width: 100%; }
+  .btn.hero-mint { margin-left: 0; width: 100%; grid-column: 1 / -1; }
+  header.site nav a { min-height: 44px; display: inline-flex; align-items: center; }
+  #hero { min-height: 92svh; }
+  .stagebar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+  .stagebtn { min-height: 56px; }
+  .hero-top { padding-top: 118px; }
+  .hero-copy p { font-size: 13.5px; }
+  .hero-side .stat { padding: 11px 13px; }
+  .stat .n { font-size: 23px; }
+  section.gate { padding: 24px 18px; border-radius: 20px; }
+  .contractline a { min-height: 44px; display: inline-flex; align-items: center; }
+  footer.site { padding-bottom: calc(34px + env(safe-area-inset-bottom)); }
   .stagebar { padding: 8px 18px 40px; }
   table.contracts td:first-child { width: 110px; }
 }
