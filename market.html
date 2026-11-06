@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Market, AgentVerse X</title>
+<meta name="description" content="Trade AgentVerse X Citizens. Age has a price: young Citizens are absorb fuel, old ones retire into 500,000 VERSE."/>
+<link rel="icon" href="favicon.svg"/>
+<link rel="stylesheet" href="css/style.css?v=1"/>
+</head>
+<body>
+<div class="strip">CITIZEN MARKET · FEE 2.5% · PAID INSTANTLY AT SALE</div>
+<header class="site" style="position:absolute;top:34px;left:0;right:0;padding-top:0">
+  <div class="brand">AGENTVERSE&nbsp;X</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#mint">Mint</a>
+    <a href="index.html#retire">Retire</a>
+    <button class="btn" id="connect-btn" style="min-height:40px;padding:9px 16px">CONNECT WALLET</button>
+  </nav>
+</header>
+<div class="mwrap">
+  <h1>Citizens, <em>trading</em>.</h1>
+  <p style="margin-top:14px;color:#c3c6e8;font-size:14px;line-height:1.65;max-width:620px">Every Citizen ages on-chain, so every listing is a slice of time. Buy a young one as absorb fuel, or buy a 44-day Sentient and retire it tomorrow. The market holds the Citizen in escrow until it sells or you delist.</p>
+  <div class="board" style="padding:24px 0 0;max-width:none">
+    <div class="cell"><div class="n" id="m-count">–</div><div class="l">LISTED NOW</div></div>
+    <div class="cell"><div class="n" id="m-floor">–</div><div class="l">FLOOR PRICE</div></div>
+    <div class="cell"><div class="n">2.5%</div><div class="l">FEE, FROM SELLER SIDE</div></div>
+    <div class="cell"><div class="n">Instant</div><div class="l">SELLER PAID AT SALE</div></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="sellbox">
+    <h3>Sell a Citizen</h3>
+    <p style="color:#c3c6e8;font-size:13px;line-height:1.6;margin-top:8px">Two steps: approve the market, then list. Your Citizen stays in escrow until it sells. Delist any time to take it back.</p>
+    <div class="row">
+      <input id="sell-id" type="number" min="1" max="10000" placeholder="Citizen number"/>
+      <input id="sell-price" type="text" inputmode="decimal" placeholder="Price in BNB, e.g. 0.01"/>
+      <button class="btn gold" id="sell-btn">LIST FOR SALE</button>
+    </div>
+    <div class="status" id="sell-status"></div>
+  </div>
+</div>
+<footer class="site">
+  <div>AGENTVERSE X · agentversex.fun<br/>Market contract: 0x86d502C664d61c913aE4e082B6c47d88BD236387</div>
+  <div><a href="index.html">Back to the verse</a></div>
+</footer>
+<script src="js/ethers.umd.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/read.js"></script>
+<script src="js/market.js"></script>
+</body>
+</html>

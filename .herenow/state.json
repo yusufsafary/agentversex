@@ -1,0 +1,9 @@
+{
+  "publishes": {
+    "stellar-vow-k7ah": {
+      "siteUrl": "https://stellar-vow-k7ah.here.now/",
+      "versionId": "01M6RW80MEHPMMP5K7TDBB8CPA",
+      "path": "/home/hatch/workspace/agentversex-publish"
+    }
+  }
+}
