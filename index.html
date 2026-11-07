@@ -6,7 +6,7 @@
 <title>AgentVerse X, Citizens that grow up alive in 3D</title>
 <meta name="description" content="AgentVerse X: living 3D constellation Citizens on BNB Chain. First Citizen free, they age on-chain, Ascendants retire into $VERSE."/>
 <link rel="icon" href="favicon.svg"/>
-<link rel="stylesheet" href="css/style.css?v=6"/>
+<link rel="stylesheet" href="css/style.css?v=7"/>
 </head>
 <body>
 <header class="site over">
@@ -15,12 +15,13 @@
     <a href="#mint">Mint</a>
     <a href="#verse">VERSE</a>
     <a href="market.html">Market</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="docs.html">Docs</a>
   </nav>
 </header>
 <section id="hero">
   <div id="scene"></div>
   <div class="hero-shade"></div>
-  <div id="glow" aria-hidden="true"></div>
   <div class="hero-top">
     <div class="hero-copy">
       <div class="kicker">LIVING NFTS · BNB CHAIN</div>
@@ -42,10 +43,6 @@
   </div>
   <div class="hint">Drag to orbit · Scroll to zoom · Click a star</div>
 </section>
-<div class="marquee" aria-hidden="true"><div class="mq-track">
-  <span>FIRST CITIZEN FREE</span><i>•</i><span>AGES ON-CHAIN, DAY BY DAY</span><i>•</i><span>ABSORB TO JUMP A STAGE</span><i>•</i><span>ASCENDANT RETIRES 500,000 VERSE</span><i>•</i><span>10,000 CITIZENS EVER</span><i>•</i>
-  <span>FIRST CITIZEN FREE</span><i>•</i><span>AGES ON-CHAIN, DAY BY DAY</span><i>•</i><span>ABSORB TO JUMP A STAGE</span><i>•</i><span>ASCENDANT RETIRES 500,000 VERSE</span><i>•</i><span>10,000 CITIZENS EVER</span><i>•</i>
-</div></div>
 <div id="birth-toast" role="status"></div>
 <main>
   <section class="gate gold" id="mint">
@@ -143,7 +140,7 @@
 </main>
 <footer class="site">
   <div>AGENTVERSE X · agentversex.fun<br/>Mint and retire run through your own agent. Citizens age on BNB Smart Chain.</div>
-  <div><a href="agentversex-skill.md">Agent skill: mint + absorb</a><br/><a href="agentversex-retire-skill.md">Agent skill: retire</a><br/><a href="market.html">Citizen market</a></div>
+  <div><a href="agentversex-skill.md">Agent skill: mint + absorb</a><br/><a href="agentversex-retire-skill.md">Agent skill: retire</a><br/><a href="market.html">Citizen market</a><br/><a href="roadmap.html">Roadmap</a> · <a href="docs.html">Docs</a></div>
 </footer>
 <script src="js/config.js"></script>
 <script src="js/read.js"></script>
@@ -339,12 +336,9 @@ function tick(){
   ring1.g.rotation.x = 1.15 + Math.sin(t*.3)*.08; ring2.g.rotation.x = 1.85 + Math.cos(t*.26)*.08;
   dust.material.opacity = cur.dust;
   dust.rotation.y = t*.03;
-  // breathing drift + parallax pointer halus
-  par.x += ((window.__avxPx || 0) - par.x) * .035;
-  par.y += ((window.__avxPy || 0) - par.y) * .035;
-  citizen.position.set((isNarrow ? 0 : 2.6) + par.x * .55, Math.sin(t*.7)*.12 - (isNarrow ? 1.1 : 0) - par.y * .38, 0);
-  citizen.rotation.y = Math.sin(t*.11)*.15 + par.x * .22;
-  citizen.rotation.x = par.y * .14;
+  // breathing drift, tenang dan konstan
+  citizen.position.set(isNarrow ? 0 : 2.6, Math.sin(t*.7)*.12 - (isNarrow ? 1.1 : 0), 0);
+  citizen.rotation.y = Math.sin(t*.11)*.15;
   controls.update();
   composer.render();
 }

@@ -330,3 +330,40 @@ section.gate { padding: 44px; }
   .stagebtn { border-radius: 16px; text-align: left; }
   .stagebtn small { display: block; margin: 0 0 4px; }
 }
+
+/* ==== v7: HALAMAN ROADMAP + DOCS ==== */
+.pagehead { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; padding: 20px 26px 6px; max-width: 1080px; margin: 0 auto; }
+.pagehead nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.pagehead nav a { color: var(--txt); text-decoration: none; font-size: 12px; letter-spacing: .14em; border: 1px solid var(--line); padding: 9px 15px; border-radius: 999px; background: rgba(10,14,34,.5); }
+.pagewrap { max-width: 860px; margin: 0 auto; padding: 34px 26px 20px; }
+.page-h { font-family: "Fraunces", serif; font-weight: 550; font-size: clamp(38px, 6vw, 58px); line-height: 1.04; margin: 10px 0 16px; }
+.page-h em { color: var(--gold); }
+.page-lede { color: #C9CEE8; font-size: 15.5px; line-height: 1.75; max-width: 640px; }
+.page-note { color: var(--mut); font-size: 13.5px; line-height: 1.75; border-top: 1px solid var(--line); padding-top: 18px; margin-top: 34px; }
+.page-note a, .doc a, .faq a { color: var(--gold); }
+.timeline { margin-top: 36px; border-top: 1px solid var(--line); }
+.tl { padding: 26px 4px 24px; border-bottom: 1px solid var(--line); }
+.tl-when { font-size: 11px; letter-spacing: .22em; color: var(--mut); }
+.tl.done .tl-when { color: var(--teal); }
+.tl.now .tl-when { color: var(--gold); }
+.tl h3 { font-family: "Fraunces", serif; font-weight: 550; font-size: 27px; margin: 8px 0 8px; }
+.tl p { color: #C9CEE8; font-size: 14.5px; line-height: 1.75; max-width: 620px; margin: 0; }
+.doc { padding: 26px 0 6px; border-top: 1px solid var(--line); margin-top: 26px; }
+.doc h2 { font-family: "Fraunces", serif; font-weight: 550; font-size: 29px; margin: 0 0 12px; }
+.doc h2 span { color: var(--gold); font-family: "Plex Mono", monospace; font-size: 15px; margin-right: 12px; letter-spacing: .1em; }
+.doc p { color: #C9CEE8; font-size: 14.5px; line-height: 1.8; max-width: 660px; }
+.dtable { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 13.5px; }
+.dtable th { text-align: left; font-size: 10.5px; letter-spacing: .2em; color: var(--mut); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.dtable td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,.05); color: #D8DCF2; vertical-align: top; }
+.dtable td a { color: var(--gold); word-break: break-all; }
+.faq h4 { font-family: "Fraunces", serif; font-size: 19px; font-weight: 550; margin: 20px 0 6px; }
+.faq p { margin: 0 0 6px; }
+footer { max-width: 1080px; margin: 26px auto 0; }
+@media (max-width: 640px) { .pagewrap { padding: 26px 18px 12px; } .dtable td, .dtable th { padding: 9px 7px; font-size: 12.5px; } }
+
+/* ==== v7: TENANG. Dekorasi mouse dimatikan, fungsi dipertahankan ==== */
+.hero-side .stat, .tm, .rc { animation: none !important; }
+section.gate::before { animation: none !important; opacity: .35; }
+.gate h2 em, .hero-copy h1 em { animation: none !important; }
+.btn:hover { transform: none; }
+.stagebtn:hover { transform: none; }

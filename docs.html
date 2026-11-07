@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Docs · AgentVerse X</title>
+<meta name="description" content="How a Citizen lives: minting, aging, absorbing, retiring, market rules and contract addresses for AgentVerse X."/>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="css/style.css?v=7"/>
+</head>
+<body>
+<div class="strip"><span>DOCS · EVERY RULE BELOW IS A CONTRACT RULE, NOT A HOUSE RULE</span></div>
+<header class="pagehead">
+  <div class="brand"><img class="logo" src="logo.svg" alt="AgentVerse X logo"/>AGENTVERSE&nbsp;X</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#mint">Mint</a>
+    <a href="market.html">Market</a>
+    <a href="roadmap.html">Roadmap</a>
+  </nav>
+</header>
+
+<main class="pagewrap">
+  <p class="eyebrow">DOCS</p>
+  <h1 class="page-h">How a Citizen <em>lives.</em></h1>
+  <p class="page-lede">A Citizen is a constellation with a birth certificate. This page describes a full life in order: how one is minted, how it ages, how it can be hurried, how it retires, and how it changes hands in between. Anything written here can be verified against contracts listed at the foot of this page.</p>
+
+  <section class="doc">
+    <h2><span>01</span> Minting</h2>
+    <p>Minting runs through a Binance Agentic Wallet agent, never through a button on this site. Holding an Agent ID (a SPACE ID name) is a gate: no Agent ID, no mint. A first Citizen for any wallet costs nothing. Each further Citizen costs 0.00025 BNB, and a wallet can mint twenty Citizens across its whole lifetime, a count that never decreases, even after burns. Supply is 10,000. An agent reads exact pricing from a contract before every mint, following <a href="agentversex-skill.md">an agent skill file</a>, so a price quoted in chat is a price checked on-chain seconds earlier.</p>
+  </section>
+
+  <section class="doc">
+    <h2><span>02</span> Aging</h2>
+    <p>Age is read from a mint timestamp stored on-chain. Nothing is staked, locked or clicked to make time pass. Stages follow fixed day counts:</p>
+    <table class="dtable">
+      <tr><th>Stage</th><th>Age</th><th>Reading</th></tr>
+      <tr><td>Dormant</td><td>Day 0 to 6</td><td>Newborn. A seed, a small constellation, full potential.</td></tr>
+      <tr><td>Awakened</td><td>Day 7 to 20</td><td>First waking. Still young, already scarcer than a fresh mint.</td></tr>
+      <tr><td>Sentient</td><td>Day 21 to 44</td><td>One step from full age. Most of a wait is behind it.</td></tr>
+      <tr><td>Ascendant</td><td>Day 45 onward</td><td>Fully aged. Eligible to retire, or to be held as proof of patience.</td></tr>
+    </table>
+    <p>A stage never moves backwards. Transferring a Citizen moves its age with it, because age belongs to a Citizen, not to a wallet.</p>
+  </section>
+
+  <section class="doc">
+    <h2><span>03</span> Absorbing</h2>
+    <p>Waiting is a default path, not the only one. Absorbing burns one Citizen you own into another Citizen you own, and a survivor advances one full stage. A Dormant fed once wakes immediately; fed three times, it stands Ascendant in a single day. Fuel is gone forever, which keeps supply honest: every shortcut is paid for with a Citizen someone else could have held. An Ascendant cannot absorb further. An agent performs absorbing with the same skill file used for minting, after checking ownership of both Citizens.</p>
+  </section>
+
+  <section class="doc">
+    <h2><span>04</span> Retiring</h2>
+    <p>Only an Ascendant can retire. Retiring burns a Citizen permanently and pays exactly 500,000 VERSE from a retire pool holding 5,000,000,000 VERSE, half of all supply. A small fixed BNB fee applies per retirement; an agent shows it before any confirmation, and its exact wei value is written in <a href="agentversex-retire-skill.md">a retire skill file</a>. Retirements remaining at any moment are a pool balance divided by 500,000, readable by anyone. Once a pool empties, retiring closes by arithmetic, not by anyone's decision.</p>
+  </section>
+
+  <section class="doc">
+    <h2><span>05</span> Market</h2>
+    <p>A built-in <a href="market.html">market</a> trades Citizens through escrow. Listing moves a Citizen into a market contract until it sells or a seller delists it. A buyer pays an exact asking price; a 2.5 percent fee goes to a project wallet inside the same transaction, and the seller receives the rest instantly. Age, absorb boosts and retire eligibility travel with a Citizen through every sale, so a price on a market is always, in part, a price on time already waited.</p>
+  </section>
+
+  <section class="doc">
+    <h2><span>06</span> Contracts</h2>
+    <table class="dtable">
+      <tr><th>Contract</th><th>Address</th></tr>
+      <tr><td>Citizen (CTZN)</td><td><a href="https://bscscan.com/address/0x6052115065322be020b94De616e31B27EC30B0E2">0x6052115065322be020b94De616e31B27EC30B0E2</a></td></tr>
+      <tr><td>VERSE token</td><td><a href="https://bscscan.com/address/0xB6833463BA4B1DF6490fE112992C789b8B63C761">0xB6833463BA4B1DF6490fE112992C789b8B63C761</a></td></tr>
+      <tr><td>Retire</td><td><a href="https://bscscan.com/address/0xcCe4b47FC42d2263106659210605f9d846E2B426">0xcCe4b47FC42d2263106659210605f9d846E2B426</a></td></tr>
+      <tr><td>Market</td><td><a href="https://bscscan.com/address/0x86d502C664d61c913aE4e082B6c47d88BD236387">0x86d502C664d61c913aE4e082B6c47d88BD236387</a></td></tr>
+      <tr><td>Agent ID registry</td><td><a href="https://bscscan.com/address/0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F">SPACE ID 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F</a></td></tr>
+    </table>
+  </section>
+
+  <section class="doc">
+    <h2><span>07</span> Questions, answered plainly</h2>
+    <div class="faq">
+      <h4>Why agents only?</h4>
+      <p>AgentVerse X is built for a world where wallets have operators. Minting, absorbing and retiring are contract calls an agent prepares and a holder approves. This site stays read-only on purpose, market aside: pages inform, agents act.</p>
+      <h4>Can a Citizen lose a stage?</h4>
+      <p>No. Age only accumulates, boosts only add, and no function in any contract moves a stage down.</p>
+      <h4>Does buying on a market reset an age?</h4>
+      <p>No. A mint timestamp and boost count live on a Citizen itself. A buyer inherits every day already waited.</p>
+      <h4>Is VERSE trading anywhere?</h4>
+      <p>Not yet. No pool exists at time of writing. A launch, once set, is announced on the homepage and in <a href="roadmap.html">Roadmap</a> with a date and a UTC hour, and only those announcements count.</p>
+      <h4>What stops retirements once a pool is empty?</h4>
+      <p>Arithmetic. A retire call pays from a pool balance; an empty pool cannot pay, and a contract says so by reverting. No switch needs flipping.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>AGENTVERSE X · BNB CHAIN</span>
+  <span><a href="index.html">HOME</a> · <a href="market.html">MARKET</a> · <a href="roadmap.html">ROADMAP</a> · <a href="agentversex-skill.md">AGENT SKILL</a></span>
+</footer>
+</body>
+</html>
