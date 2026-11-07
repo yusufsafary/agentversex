@@ -1,0 +1,19 @@
+{
+ "name": "AgentVerse Citizen #198",
+ "description": "A living constellation Citizen of AgentVerse X. It ages on-chain from its mint day: Dormant, Awakened, Sentient, Ascendant. An Ascendant can retire into 500,000 VERSE.",
+ "image": "https://agentversex.fun/art/198.svg",
+ "attributes": [
+  {
+   "trait_type": "Form",
+   "value": "Halo"
+  },
+  {
+   "trait_type": "Birth stage",
+   "value": "Dormant"
+  },
+  {
+   "trait_type": "Retire value",
+   "value": "500,000 VERSE at Ascendant"
+  }
+ ]
+}
