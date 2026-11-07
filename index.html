@@ -6,7 +6,7 @@
 <title>AgentVerse X, Citizens that grow up alive in 3D</title>
 <meta name="description" content="AgentVerse X: living 3D constellation Citizens on BNB Chain. First Citizen free, they age on-chain, Ascendants retire into $VERSE."/>
 <link rel="icon" href="favicon.svg"/>
-<link rel="stylesheet" href="css/style.css?v=3"/>
+<link rel="stylesheet" href="css/style.css?v=4"/>
 </head>
 <body>
 <header class="site over">
@@ -41,6 +41,11 @@
   </div>
   <div class="hint">Drag to orbit · Scroll to zoom · Click a star</div>
 </section>
+<div class="marquee" aria-hidden="true"><div class="mq-track">
+  <span>FIRST CITIZEN FREE</span><i>•</i><span>AGES ON-CHAIN, DAY BY DAY</span><i>•</i><span>ABSORB TO JUMP A STAGE</span><i>•</i><span>ASCENDANT RETIRES 500,000 VERSE</span><i>•</i><span>10,000 CITIZENS EVER</span><i>•</i>
+  <span>FIRST CITIZEN FREE</span><i>•</i><span>AGES ON-CHAIN, DAY BY DAY</span><i>•</i><span>ABSORB TO JUMP A STAGE</span><i>•</i><span>ASCENDANT RETIRES 500,000 VERSE</span><i>•</i><span>10,000 CITIZENS EVER</span><i>•</i>
+</div></div>
+<div id="birth-toast" role="status"></div>
 <main>
   <section class="gate gold" id="mint">
     <div class="kicker">01 · MINT</div>
@@ -50,6 +55,20 @@
       <div class="fact"><div class="v">10,000</div><div class="k">TOTAL SUPPLY</div></div>
       <div class="fact"><div class="v" id="b-left">–</div><div class="k">CITIZENS LEFT</div></div>
       <div class="fact"><div class="v" id="b-alive">–</div><div class="k">ALIVE NOW</div></div>
+    </div>
+    <div class="timemachine">
+      <div class="plabel">TIME MACHINE · DRAG THROUGH A CITIZEN'S LIFE</div>
+      <div class="tm-stage" id="tm-stage">DORMANT</div>
+      <div class="tm-orbs" id="tm-orbs"><i class="on"></i><i></i><i></i><i></i><em id="tm-fill"></em></div>
+      <div class="tm-row">
+        <span class="tm-day" id="tm-day">DAY 0</span>
+        <input id="tm-range" type="range" min="0" max="60" value="0" step="1" aria-label="Citizen age in days"/>
+        <span class="tm-note" id="tm-note">Ascendant at day 45</span>
+      </div>
+      <div class="tm-row2">
+        <button class="btn" id="tm-absorb" type="button">SIMULATE ABSORB · +1 STAGE</button>
+        <span class="tm-boost" id="tm-boost">Absorbs simulated: 0 · each one burns a real Citizen when done on-chain</span>
+      </div>
     </div>
     <div class="promptbox">
       <div class="pl">GIVE THIS TO YOUR AGENT</div>
@@ -93,11 +112,20 @@
     <div class="alloc" aria-label="VERSE allocation">
       <i class="a1" style="width:50%"></i><i class="a2" style="width:20%"></i><i class="a3" style="width:10%"></i><i class="a4" style="width:20%"></i>
     </div>
-    <div class="alloc-legend">
-      <span><i class="a1"></i>RETIRE POOL 50%</span>
-      <span><i class="a2"></i>INITIAL LIQUIDITY 20%</span>
-      <span><i class="a3"></i>LIQUIDITY SUPPORT 10%</span>
-      <span><i class="a4"></i>PROJECT RESERVE 20%</span>
+    <div class="alloc-legend" id="alloc-legend">
+      <button type="button" class="on" data-a="0"><i class="a1"></i>RETIRE POOL 50%</button>
+      <button type="button" data-a="1"><i class="a2"></i>INITIAL LIQUIDITY 20%</button>
+      <button type="button" data-a="2"><i class="a3"></i>LIQUIDITY SUPPORT 10%</button>
+      <button type="button" data-a="3"><i class="a4"></i>PROJECT RESERVE 20%</button>
+    </div>
+    <div class="alloc-detail" id="alloc-detail">5,000,000,000 VERSE sit in the retire contract. Every Ascendant that retires takes 500,000 of it, and its Citizen burns forever. Tap a slice to read the rest.</div>
+    <div class="retirecalc">
+      <div class="plabel">RETIRE CALCULATOR · HOW MANY ASCENDANTS WILL YOU RETIRE?</div>
+      <div class="rc-row">
+        <input id="rc-range" type="range" min="1" max="50" value="1" step="1" aria-label="Number of Ascendants to retire"/>
+        <div class="rc-out"><span id="rc-n">1</span> ASCENDANT → <b id="rc-verse">500,000 VERSE</b></div>
+      </div>
+      <div class="rc-note" id="rc-note">That is 0.01% of the retire pool. The pool pays 10,000 retires in total, ever.</div>
     </div>
     <div class="promptbox">
       <div class="pl">RETIRE, VIA YOUR AGENT</div>
@@ -118,7 +146,7 @@
 </footer>
 <script src="js/config.js"></script>
 <script src="js/read.js"></script>
-<script src="js/app.js?v=2"></script>
+<script src="js/app.js?v=3"></script>
 <script type="importmap">
 { "imports": {
   "three": "./vendor/three.module.js",

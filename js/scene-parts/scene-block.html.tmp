@@ -1,0 +1,174 @@
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three.module.js",
+  "three/addons/": "./vendor/addons/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+const wrap = document.getElementById('scene');
+const heroEl = document.getElementById('hero');
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+wrap.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x05060f);
+scene.fog = new THREE.FogExp2(0x05060f, 0.028);
+const camera = new THREE.PerspectiveCamera(46, wrap.clientWidth/wrap.clientHeight, .1, 100);
+const isNarrow = wrap.clientWidth < 760;
+camera.position.set(isNarrow ? 0 : 2.6, 0.6, isNarrow ? 13.5 : 9.2);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = .06;
+controls.enablePan = false; controls.minDistance = 6; controls.maxDistance = 13;
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+controls.autoRotate = !reducedMotion; controls.autoRotateSpeed = .55;
+
+// ambient starfield
+function makeStars(n, rMin, rMax, size, color, opacity){
+  const g = new THREE.BufferGeometry();
+  const pos = new Float32Array(n*3);
+  for (let i=0;i<n;i++){
+    const v = new THREE.Vector3().randomDirection().multiplyScalar(rMin + Math.random()*(rMax-rMin));
+    pos.set([v.x, v.y, v.z], i*3);
+  }
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const m = new THREE.PointsMaterial({ color, size, transparent:true, opacity, depthWrite:false, sizeAttenuation:true });
+  return new THREE.Points(g, m);
+}
+scene.add(makeStars(900, 16, 34, .055, 0xbfc8ff, .8));
+scene.add(makeStars(500, 12, 26, .09, 0xffffff, .55));
+
+// glow sprite texture
+function glowTexture(){
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const x = c.getContext('2d');
+  const gr = x.createRadialGradient(64,64,0,64,64,64);
+  gr.addColorStop(0,'rgba(255,255,255,1)'); gr.addColorStop(.25,'rgba(255,255,255,.55)');
+  gr.addColorStop(.6,'rgba(255,255,255,.12)'); gr.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle = gr; x.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(c);
+}
+const glowTex = glowTexture();
+
+// citizen group
+const citizen = new THREE.Group(); scene.add(citizen);
+const MAXN = 130;
+let seed = 4242;
+function rnd(){ seed = (seed*1103515245 + 12345) % 2147483648; return seed/2147483648; }
+const nodes = [];
+for (let i=0;i<MAXN;i++){
+  const v = new THREE.Vector3().randomDirection().multiplyScalar(1.15 + rnd()*1.5);
+  nodes.push({ p: v, s: .5 + rnd()*.9, ph: rnd()*Math.PI*2 });
+}
+// points
+const nodeGeo = new THREE.BufferGeometry();
+{
+  const pos = new Float32Array(MAXN*3);
+  nodes.forEach((n,i)=> pos.set([n.p.x, n.p.y, n.p.z], i*3));
+  nodeGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+}
+const nodeMat = new THREE.PointsMaterial({ color:0xf4f2ea, size:.17, map:glowTex, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending });
+const nodePts = new THREE.Points(nodeGeo, nodeMat); citizen.add(nodePts);
+// links between near nodes
+const linkPairs = [];
+for (let i=0;i<MAXN;i++) for (let j=i+1;j<MAXN;j++)
+  if (nodes[i].p.distanceTo(nodes[j].p) < 1.35) linkPairs.push([i,j]);
+linkPairs.sort((x,y)=> Math.max(x[0],x[1]) - Math.max(y[0],y[1]));
+const linkGeo = new THREE.BufferGeometry();
+{
+  const pos = new Float32Array(linkPairs.length*6);
+  linkPairs.forEach(([a,b],k)=>{ pos.set([nodes[a].p.x,nodes[a].p.y,nodes[a].p.z, nodes[b].p.x,nodes[b].p.y,nodes[b].p.z], k*6); });
+  linkGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+}
+const linkMat = new THREE.LineBasicMaterial({ color:0x38e1ff, transparent:true, opacity:.35, blending:THREE.AdditiveBlending, depthWrite:false });
+const links = new THREE.LineSegments(linkGeo, linkMat); citizen.add(links);
+// core
+const core = new THREE.Mesh(new THREE.SphereGeometry(.17, 32, 32), new THREE.MeshBasicMaterial({ color:0x38e1ff }));
+citizen.add(core);
+const coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map:glowTex, color:0x38e1ff, transparent:true, opacity:.85, depthWrite:false, blending:THREE.AdditiveBlending }));
+coreGlow.scale.setScalar(1.5); citizen.add(coreGlow);
+// rings
+function ring(radius, color, tilt){
+  const g = new THREE.Group();
+  const m = new THREE.Mesh(new THREE.TorusGeometry(radius, .008, 8, 220), new THREE.MeshBasicMaterial({ color, transparent:true, opacity:.0 }));
+  g.add(m); g.rotation.set(tilt[0], tilt[1], tilt[2]); citizen.add(g);
+  return { g, m };
+}
+const ring1 = ring(3.05, 0x7c6cff, [1.15, .2, .35]);
+const ring2 = ring(3.45, 0xffc53d, [1.85, -.5, .1]);
+// gold dust shell for ascendant
+const dust = makeStars(340, 2.9, 3.6, .05, 0xffc53d, 0); citizen.add(dust);
+
+// stages
+const STAGES = [
+  { name:'DORMANT',    xp:0,    n:16,   link:.10, core:.13, coreCol:0x2b6f86, ring:0,    dust:0, label:'STAGE 01' },
+  { name:'AWAKENED',   xp:100,  n:34,  link:.30, core:.17, coreCol:0x38e1ff, ring:0,    dust:0, label:'STAGE 02' },
+  { name:'SENTIENT',   xp:500,  n:78,  link:.5,  core:.24, coreCol:0x9a86ff, ring:.85,  dust:0, label:'STAGE 03' },
+  { name:'ASCENDANT',  xp:2000, n:130, link:.68, core:.34, coreCol:0xffc53d, ring:1,    dust:.95, label:'STAGE 04' },
+];
+let cur = { n:6, link:.1, core:.13, ring:0, dust:0 };
+let target = { ...cur };
+let coreCol = new THREE.Color(0x2b6f86), coreColT = new THREE.Color(0x2b6f86);
+
+window.AVXStage = function(i){
+  const s = STAGES[i];
+  target = { n:s.n, link:s.link, core:s.core, ring:s.ring, dust:s.dust };
+  coreColT.set(s.coreCol);
+  linkMat.color.set(i>=2 ? 0x8f7bff : 0x38e1ff);
+};
+window.AVXStage(0);
+
+addEventListener('resize', ()=>{
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+});
+
+// post: bloom
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(wrap.clientWidth, wrap.clientHeight), .95, .75, .12);
+composer.addPass(bloom);
+
+const clock = new THREE.Clock();
+function tick(){
+  requestAnimationFrame(tick);
+  const t = clock.getElapsedTime();
+  // ease toward target
+  for (const k of ['n','link','core','ring','dust']) cur[k] += (target[k]-cur[k])*.045;
+  coreCol.lerp(coreColT, .05);
+  // visibility by fractional node count
+  const nVis = cur.n;
+  nodeGeo.setDrawRange(0, Math.floor(nVis));
+  { // tautan mengikuti node yang terlihat dan fraksi tahap
+    let cnt = 0;
+    while (cnt < linkPairs.length && Math.max(linkPairs[cnt][0], linkPairs[cnt][1]) < nVis) cnt++;
+    linkGeo.setDrawRange(0, Math.floor(cnt * Math.min(1, cur.link*1.6)) * 2);
+  }
+  nodeMat.opacity = .95;
+  linkMat.opacity = .14 + cur.link*.4;
+  core.scale.setScalar(cur.core/.17 * (1 + Math.sin(t*2.1)*.06));
+  core.material.color.copy(coreCol);
+  coreGlow.material.color.copy(coreCol);
+  coreGlow.scale.setScalar(1.1 + cur.core*3.4 + Math.sin(t*2.1)*.12);
+  ring1.m.material.opacity = cur.ring*.8; ring2.m.material.opacity = cur.ring*.9;
+  ring1.g.rotation.z = t*.12; ring2.g.rotation.z = -t*.09;
+  ring1.g.rotation.x = 1.15 + Math.sin(t*.3)*.08; ring2.g.rotation.x = 1.85 + Math.cos(t*.26)*.08;
+  dust.material.opacity = cur.dust;
+  dust.rotation.y = t*.03;
+  // breathing drift
+  citizen.position.set(isNarrow ? 0 : 2.6, Math.sin(t*.7)*.12 - (isNarrow ? 1.1 : 0), 0);
+  citizen.rotation.y = Math.sin(t*.11)*.15;
+  controls.update();
+  composer.render();
+}
+tick();
+</script>
+

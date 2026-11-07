@@ -124,3 +124,98 @@
     const v = window.AVXHighlight;
     el.textContent = v ? "N\u00ba " + v : "\u2013";
   }, 350);
+
+// ---------- upgrade v4: reveal, time machine, alokasi, kalkulator, toast kelahiran ----------
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => n.toLocaleString("en-US");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // reveal saat masuk layar
+  const targets = document.querySelectorAll("section.gate, .fact, .promptbox, .twocol .checker, .timemachine, .retirecalc, .marquee");
+  targets.forEach((el) => el.classList.add("rv"));
+  if ("IntersectionObserver" in window && !reduced) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }), { threshold: 0.1 });
+    targets.forEach((el) => io.observe(el));
+  } else targets.forEach((el) => el.classList.add("in"));
+
+  // toast saat Citizen baru lahir (dari event papan live)
+  let lastMinted = null, toastTimer = null;
+  window.addEventListener("avx:board", (ev) => {
+    const m = ev.detail && ev.detail.minted;
+    if (typeof m !== "number") return;
+    if (lastMinted !== null && m > lastMinted) {
+      const t = $("birth-toast");
+      if (t) {
+        t.textContent = m - lastMinted === 1
+          ? "Citizen N\u00ba " + fmt(m) + " was just born on-chain."
+          : fmt(m - lastMinted) + " new Citizens were just born. Latest: N\u00ba " + fmt(m) + ".";
+        t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove("show"), 5200);
+      }
+      const stat = document.querySelector(".hero-side .stat");
+      if (stat) { stat.classList.remove("pulse"); void stat.offsetWidth; stat.classList.add("pulse"); }
+    }
+    lastMinted = m;
+  });
+
+  // time machine: umur -> tahap, plus simulasi absorb
+  const DAYS = [0, 7, 21, 45], NAMES = ["DORMANT", "AWAKENED", "SENTIENT", "ASCENDANT"];
+  let boost = 0;
+  const stageByDay = (d) => d >= 45 ? 3 : d >= 21 ? 2 : d >= 7 ? 1 : 0;
+  function tmRender() {
+    const range = $("tm-range"); if (!range) return;
+    const day = Number(range.value);
+    const base = stageByDay(day);
+    const eff = Math.min(3, base + boost);
+    const st = $("tm-stage");
+    st.textContent = NAMES[eff];
+    st.className = "tm-stage s" + eff;
+    $("tm-day").textContent = "DAY " + day;
+    document.querySelectorAll("#tm-orbs i").forEach((o, i) => o.classList.toggle("on", i <= eff));
+    $("tm-fill").style.width = (eff / 3 * 100) + "%";
+    $("tm-note").textContent = eff === 3
+      ? "Ready to retire: 500,000 VERSE"
+      : "Ascendant at day 45 · " + (45 - day) + " days of aging left" + (boost ? " · absorb already jumped " + boost : "");
+    $("tm-boost").textContent = "Absorbs simulated: " + boost + " · each one burns a real Citizen when done on-chain";
+    $("tm-absorb").disabled = eff === 3;
+    $("tm-absorb").style.opacity = eff === 3 ? .45 : 1;
+  }
+  if ($("tm-range")) {
+    $("tm-range").addEventListener("input", tmRender);
+    $("tm-absorb").addEventListener("click", () => { if (stageByDay(Number($("tm-range").value)) + boost < 3) { boost++; tmRender(); } });
+    tmRender();
+  }
+
+  // bar alokasi interaktif
+  const ALLOC_TEXT = [
+    "5,000,000,000 VERSE sit in the retire contract. Every Ascendant that retires takes 500,000 of it, and its Citizen burns forever.",
+    "2,000,000,000 VERSE are reserved to seed the first VERSE pool on PancakeSwap when the launch opens.",
+    "1,000,000,000 VERSE back the pool after launch, added as liquidity support when the market needs depth.",
+    "2,000,000,000 VERSE stay with the project for development, listings and the long life of the verse."
+  ];
+  const legend = $("alloc-legend");
+  if (legend) legend.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+    legend.querySelectorAll("button").forEach((x) => x.classList.remove("on"));
+    b.classList.add("on");
+    const i = Number(b.dataset.a);
+    $("alloc-detail").textContent = ALLOC_TEXT[i];
+    document.querySelectorAll(".alloc i").forEach((seg, j) => seg.classList.toggle("dim", j !== i));
+  }));
+
+  // kalkulator retire
+  const rc = $("rc-range");
+  if (rc) {
+    const render = () => {
+      const n = Number(rc.value);
+      $("rc-n").textContent = n;
+      $("rc-verse").textContent = fmt(n * 500000) + " VERSE";
+      $("rc-note").textContent = "That is " + (n * 500000 / 5000000000 * 100).toFixed(2).replace(/\.?0+$/, "") + "% of the retire pool. The pool pays 10,000 retires in total, ever.";
+    };
+    rc.addEventListener("input", render);
+    render();
+  }
+})();
