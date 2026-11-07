@@ -1,20 +1,41 @@
-// Market AgentVerse X: grid listing dari kontrak VerseMarket, beli/delist
+// Market AgentVerse X v2: grid listing dari kontrak VerseMarket, beli/delist
 // dengan wallet browser, jual dua langkah (approve lalu list). Fee 2,5%.
+// Semua status tampil di bar lengket bawah (#m-status) agar selalu terlihat,
+// tombol yang sedang diproses terkunci dengan label progres.
 (function () {
-  const { call, padAddr, padNum, toNum, toBig, SEL } = window.AVXRead;
+  const { call, padAddr, padNum, toNum, SEL } = window.AVXRead;
   const C = window.AVX;
   const $ = (id) => document.getElementById(id);
   const fmt = (n) => n.toLocaleString("en-US");
   const bnb = (wei) => (Number(wei) / 1e18).toFixed(5).replace(/0+$/, "").replace(/\.$/, ".0") + " BNB";
   let account = null;
   let provider = null;
+  let busy = false;
 
-  const WRITE_SEL = {
-    list: "0x50fd7367",
-    buy: "0xd96a094a",
-    delist: "0x964bc33f",
-    approve: "0x095ea7b3"
-  };
+  const WRITE_SEL = { list: "0x50fd7367", buy: "0xd96a094a", delist: "0x964bc33f", approve: "0x095ea7b3" };
+
+  let statusTimer = null;
+  function say(msg, kind) {
+    const bar = $("m-status");
+    if (bar) {
+      bar.textContent = msg;
+      bar.className = "show " + (kind || "info");
+      clearTimeout(statusTimer);
+      if (kind !== "work") statusTimer = setTimeout(() => bar.classList.remove("show"), 7000);
+    }
+    const s = $("sell-status");
+    if (s) s.textContent = msg;
+  }
+  function fail(prefix, e) {
+    const m = (e && (e.shortMessage || e.message)) || String(e);
+    if (e && (e.code === 4001 || /user rejected|user denied|rejected the request/i.test(m))) {
+      say(prefix + " cancelled in your wallet. Nothing was sent.", "err");
+    } else if (/No browser wallet/i.test(m)) {
+      say("No wallet found. Open this page inside a wallet browser (Binance or Trust Wallet), then tap BUY again.", "err");
+    } else {
+      say(prefix + " failed: " + m.slice(0, 140), "err");
+    }
+  }
 
   async function loadListings() {
     const grid = $("grid");
@@ -52,17 +73,17 @@
       grid.innerHTML = cards.map((c) => {
         const mine = account && c.seller.toLowerCase() === account.toLowerCase();
         return `<div class="card">
-          <img src="art/${c.id}.svg" alt="Citizen ${c.id}" onerror="this.style.display='none'"/>
+          <img src="art/${c.id}.svg" alt="Citizen ${c.id}" loading="lazy" onerror="this.style.display='none'"/>
           <div class="id">Citizen Nº ${c.id}</div>
           <div class="meta">${C.stages[c.stage].toUpperCase()} · AGE ${c.age} DAYS<br/>SELLER ${c.seller.slice(0, 6)}...${c.seller.slice(-4)}</div>
           <div class="price">${bnb(c.price)}</div>
           ${mine
             ? `<button class="btn" data-delist="${c.id}">DELIST</button>`
-            : `<button class="btn gold" data-buy="${c.id}" data-price="${c.price}">BUY</button>`}
+            : `<button class="btn gold" data-buy="${c.id}" data-price="${c.price}">BUY · ${bnb(c.price)}</button>`}
         </div>`;
       }).join("");
-      grid.querySelectorAll("[data-buy]").forEach((b) => b.addEventListener("click", () => buy(BigInt(b.dataset.buy), BigInt(b.dataset.price))));
-      grid.querySelectorAll("[data-delist]").forEach((b) => b.addEventListener("click", () => delist(BigInt(b.dataset.delist))));
+      grid.querySelectorAll("[data-buy]").forEach((b) => b.addEventListener("click", () => buy(b, BigInt(b.dataset.buy), BigInt(b.dataset.price))));
+      grid.querySelectorAll("[data-delist]").forEach((b) => b.addEventListener("click", () => delist(b, BigInt(b.dataset.delist))));
     } catch (e) {
       grid.innerHTML = '<div class="card"><div class="id">Chain read failed</div><div class="meta">Try again in a moment.</div></div>';
     }
@@ -73,6 +94,7 @@
     if (!provider) provider = new ethers.BrowserProvider(window.ethereum);
     const net = await provider.getNetwork();
     if (Number(net.chainId) !== 56) {
+      say("Switching your wallet to BNB Chain...", "work");
       await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x38" }] });
       provider = new ethers.BrowserProvider(window.ethereum);
     }
@@ -85,45 +107,59 @@
     return provider.getSigner();
   }
 
-  async function send(to, data, value) {
+  async function send(to, data, value, btn, label) {
     const signer = await ensureWallet();
+    if (btn) { btn.disabled = true; btn.textContent = "CONFIRM IN WALLET..."; }
+    say("Confirm the transaction in your wallet.", "work");
     const tx = await signer.sendTransaction({ to, data, value: value || 0n });
-    $("sell-status").textContent = "Transaction sent: " + tx.hash.slice(0, 14) + "... waiting for confirmation.";
+    if (btn) btn.textContent = "CONFIRMING...";
+    say("Sent: " + tx.hash.slice(0, 16) + "... waiting for confirmation.", "work");
     await tx.wait();
-    $("sell-status").textContent = "Confirmed: " + tx.hash;
+    say((label || "Done") + " confirmed: " + tx.hash.slice(0, 16) + "...", "ok");
+    if (btn) { btn.disabled = false; }
   }
 
-  async function buy(id, price) {
-    try { await send(C.market.address, WRITE_SEL.buy + padNum(id), price); await loadListings(); }
-    catch (e) { $("sell-status").textContent = "Buy failed: " + (e.shortMessage || e.message); }
+  async function buy(btn, id, price) {
+    if (busy) return; busy = true;
+    try { await send(C.market.address, WRITE_SEL.buy + padNum(id), price, btn, "Purchase"); await loadListings(); }
+    catch (e) { if (btn) { btn.disabled = false; btn.textContent = "BUY · " + bnb(price); } fail("Buy", e); }
+    busy = false;
   }
-  async function delist(id) {
-    try { await send(C.market.address, WRITE_SEL.delist + padNum(id)); await loadListings(); }
-    catch (e) { $("sell-status").textContent = "Delist failed: " + (e.shortMessage || e.message); }
+  async function delist(btn, id) {
+    if (busy) return; busy = true;
+    try { await send(C.market.address, WRITE_SEL.delist + padNum(id), 0n, btn, "Delist"); await loadListings(); }
+    catch (e) { if (btn) { btn.disabled = false; btn.textContent = "DELIST"; } fail("Delist", e); }
+    busy = false;
   }
 
   async function sell() {
     const id = BigInt($("sell-id").value || 0);
     const priceEth = $("sell-price").value.trim();
-    if (!id || !priceEth) { $("sell-status").textContent = "Enter a Citizen number and a price in BNB."; return; }
+    if (!id || !priceEth) { say("Enter a Citizen number and a price in BNB first.", "err"); return; }
     const price = ethers.parseEther(priceEth);
+    const btn = $("sell-btn");
     try {
       const approved = await call(C.contract.address, SEL.getApproved + padNum(id));
       const approvedAddr = approved && approved !== "0x" ? "0x" + approved.slice(-40) : "";
       if (approvedAddr.toLowerCase() !== C.market.address.toLowerCase()) {
-        $("sell-status").textContent = "Step 1 of 2: approve the market to hold Citizen Nº " + id + ".";
-        await send(C.contract.address, WRITE_SEL.approve + padAddr(C.market.address) + padNum(id));
+        say("Step 1 of 2: approve the market to hold Citizen Nº " + id + ".", "work");
+        await send(C.contract.address, WRITE_SEL.approve + padAddr(C.market.address) + padNum(id), 0n, btn, "Approve");
       }
-      $("sell-status").textContent = "Step 2 of 2: listing Citizen Nº " + id + ".";
-      await send(C.market.address, WRITE_SEL.list + padNum(id) + padNum(price));
+      say("Step 2 of 2: listing Citizen Nº " + id + " for " + priceEth + " BNB.", "work");
+      await send(C.market.address, WRITE_SEL.list + padNum(id) + padNum(price), 0n, btn, "Listing");
       await loadListings();
-    } catch (e) { $("sell-status").textContent = "Sell failed: " + (e.shortMessage || e.message); }
+    } catch (e) { btn.disabled = false; btn.textContent = "LIST FOR SALE"; fail("Sell", e); }
   }
 
   $("connect-btn").addEventListener("click", async () => {
-    try { await ensureWallet(); } catch (e) { $("sell-status").textContent = e.message; }
+    try { await ensureWallet(); say("Wallet connected: " + account.slice(0, 6) + "..." + account.slice(-4), "ok"); }
+    catch (e) { fail("Connect", e); }
   });
   $("sell-btn").addEventListener("click", sell);
+  if (window.ethereum && window.ethereum.on) {
+    window.ethereum.on("accountsChanged", () => location.reload());
+    window.ethereum.on("chainChanged", () => location.reload());
+  }
   loadListings();
   setInterval(loadListings, 90000);
 })();
