@@ -6,11 +6,11 @@
 <title>AgentVerse X, Citizens that grow up alive in 3D</title>
 <meta name="description" content="AgentVerse X: living 3D constellation Citizens on BNB Chain. First Citizen free, they age on-chain, Ascendants retire into $VERSE."/>
 <link rel="icon" href="favicon.svg"/>
-<link rel="stylesheet" href="css/style.css?v=5"/>
+<link rel="stylesheet" href="css/style.css?v=6"/>
 </head>
 <body>
 <header class="site over">
-  <div class="brand">AGENTVERSE&nbsp;X</div>
+  <div class="brand"><img class="logo" src="logo.svg" alt="AgentVerse X logo"/>AGENTVERSE&nbsp;X</div>
   <nav>
     <a href="#mint">Mint</a>
     <a href="#verse">VERSE</a>
@@ -20,16 +20,17 @@
 <section id="hero">
   <div id="scene"></div>
   <div class="hero-shade"></div>
+  <div id="glow" aria-hidden="true"></div>
   <div class="hero-top">
     <div class="hero-copy">
       <div class="kicker">LIVING NFTS · BNB CHAIN</div>
       <h1>A citizen that grows up <em>alive</em>, in 3D, on-chain.</h1>
-      <p>Every Citizen is a living constellation, rendered in real time. It is born small and ages on-chain, day by day. At full age it retires into $VERSE.</p>
+      <p>A living constellation, rendered in real time. Born small, it ages on-chain day by day, and at full age it retires into $VERSE.</p>
     </div>
     <div class="hero-side">
-      <div class="stat"><div class="n" id="b-minted">–</div><div class="l">CITIZENS MINTED</div><div class="progress"><i id="mint-progress"></i></div></div>
-      <div class="stat"><div class="n gold" id="hero-stage-name">DORMANT</div><div class="l">NOW SHOWING · TAP A STAGE</div></div>
-      <div class="stat"><div class="n" id="hero-pick">–</div><div class="l">CITIZEN SPOTTED · CLICK A STAR</div></div>
+      <div class="hstat"><span class="n" id="b-minted">–</span><span class="l">CITIZENS MINTED</span><div class="progress"><i id="mint-progress"></i></div></div>
+      <div class="hstat"><span class="n gold" id="hero-stage-name">DORMANT</span><span class="l">NOW SHOWING · TAP A STAGE</span></div>
+      <div class="hstat"><span class="n" id="hero-pick">–</span><span class="l">CITIZEN SPOTTED · CLICK A STAR</span></div>
     </div>
   </div>
   <div class="stagebar">
@@ -50,7 +51,7 @@
   <section class="gate gold" id="mint">
     <div class="kicker">01 · MINT</div>
     <h2>Your first citizen is <em>free</em>.</h2>
-    <p>Ask your Binance Agentic Wallet agent to mint. First Citizen costs nothing. Each extra one costs 0.00025 BNB, up to twenty per wallet, forever. Every Citizen is born Dormant, its constellation seed locked on-chain at mint. It then ages one stage at a time: Dormant, Awakened, Sentient, Ascendant. In a hurry, absorb another Citizen into yours: that one burns, yours jumps a stage instantly.</p>
+    <p>Mint through your Binance Agentic Wallet agent. The first Citizen is free, each extra is 0.00025 BNB, up to twenty per wallet. Every Citizen is born Dormant and ages one stage at a time. In a hurry? Absorb another Citizen into yours: it burns, yours jumps a stage instantly.</p>
     <div class="facts">
       <div class="fact"><div class="v">10,000</div><div class="k">TOTAL SUPPLY</div></div>
       <div class="fact"><div class="v" id="b-left">–</div><div class="k">CITIZENS LEFT</div></div>
@@ -103,7 +104,7 @@
   <section class="gate" id="verse">
     <div class="kicker gold">02 · $VERSE</div>
     <h2>Full age pays <em>500,000 VERSE</em>.</h2>
-    <p>Only an Ascendant can retire. Retiring burns the Citizen forever and pays 500,000 VERSE from a pool holding half of all supply. A small fixed BNB fee applies per retire, shown by your agent before you confirm. Younger Citizens cannot retire, so every day of age is value. Trade them on the built-in market, or hold and let time finish the work.</p>
+    <p>Only an Ascendant can retire. Retiring burns the Citizen forever and pays 500,000 VERSE from a pool holding half of all supply. Younger Citizens cannot retire, so every day of age carries value. Trade them on the market, or hold and let time finish the work.</p>
     <div class="facts">
       <div class="fact"><div class="v">10B</div><div class="k">VERSE SUPPLY, FIXED</div></div>
       <div class="fact"><div class="v" id="b-retire-left">–</div><div class="k">RETIRES LEFT IN POOL</div></div>
@@ -146,7 +147,7 @@
 </footer>
 <script src="js/config.js"></script>
 <script src="js/read.js"></script>
-<script src="js/app.js?v=3"></script>
+<script src="js/app.js?v=4"></script>
 <script type="importmap">
 { "imports": {
   "three": "./vendor/three.module.js",
@@ -310,6 +311,7 @@ composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(new THREE.Vector2(wrap.clientWidth, wrap.clientHeight), .95, .75, .12);
 composer.addPass(bloom);
 
+const par = { x: 0, y: 0 };
 const clock = new THREE.Clock();
 function tick(){
   requestAnimationFrame(tick);
@@ -337,9 +339,12 @@ function tick(){
   ring1.g.rotation.x = 1.15 + Math.sin(t*.3)*.08; ring2.g.rotation.x = 1.85 + Math.cos(t*.26)*.08;
   dust.material.opacity = cur.dust;
   dust.rotation.y = t*.03;
-  // breathing drift
-  citizen.position.set(isNarrow ? 0 : 2.6, Math.sin(t*.7)*.12 - (isNarrow ? 1.1 : 0), 0);
-  citizen.rotation.y = Math.sin(t*.11)*.15;
+  // breathing drift + parallax pointer halus
+  par.x += ((window.__avxPx || 0) - par.x) * .035;
+  par.y += ((window.__avxPy || 0) - par.y) * .035;
+  citizen.position.set((isNarrow ? 0 : 2.6) + par.x * .55, Math.sin(t*.7)*.12 - (isNarrow ? 1.1 : 0) - par.y * .38, 0);
+  citizen.rotation.y = Math.sin(t*.11)*.15 + par.x * .22;
+  citizen.rotation.x = par.y * .14;
   controls.update();
   composer.render();
 }

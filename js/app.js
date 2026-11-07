@@ -156,7 +156,7 @@
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => t.classList.remove("show"), 5200);
       }
-      const stat = document.querySelector(".hero-side .stat");
+      const stat = document.querySelector(".hero-side .hstat");
       if (stat) { stat.classList.remove("pulse"); void stat.offsetWidth; stat.classList.add("pulse"); }
     }
     lastMinted = m;
@@ -218,4 +218,51 @@
     rc.addEventListener("input", render);
     render();
   }
+})();
+
+// ---------- upgrade v6: glow kursor, parallax pointer, angka count-up ----------
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => n.toLocaleString("en-US");
+  const fine = matchMedia("(pointer: fine)").matches;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // posisi pointer ternormalisasi untuk parallax scene 3D + glow hero
+  const hero = $("hero"), glow = $("glow");
+  if (hero && !reduced) {
+    let raf = null, lx = 0, ly = 0;
+    window.addEventListener("pointermove", (ev) => {
+      const r = hero.getBoundingClientRect();
+      if (ev.clientY < r.top || ev.clientY > r.bottom) { window.__avxPx = 0; window.__avxPy = 0; if (glow) glow.style.opacity = 0; return; }
+      window.__avxPx = ((ev.clientX - r.left) / r.width) * 2 - 1;
+      window.__avxPy = ((ev.clientY - r.top) / r.height) * 2 - 1;
+      lx = ev.clientX - r.left; ly = ev.clientY - r.top;
+      if (glow && fine) {
+        if (raf) return;
+        raf = requestAnimationFrame(() => { glow.style.opacity = 1; glow.style.transform = `translate(${lx - 260}px, ${ly - 260}px)`; raf = null; });
+      }
+    }, { passive: true });
+  }
+
+  // angka papan menanjak halus dari nilai sebelumnya
+  const prev = {};
+  function tween(id, to) {
+    const el = $(id);
+    if (!el || typeof to !== "number") return;
+    const from = prev[id] !== undefined ? prev[id] : 0;
+    prev[id] = to;
+    if (reduced || from === to) { el.textContent = fmt(to); return; }
+    const t0 = performance.now(), dur = 850;
+    (function step(t) {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round(from + (to - from) * e));
+      if (k < 1 && prev[id] === to) requestAnimationFrame(step);
+    })(t0);
+  }
+  window.addEventListener("avx:board", (ev) => {
+    const d = ev.detail || {};
+    tween("b-minted", d.minted);
+    tween("b-alive", d.alive);
+    if (typeof d.minted === "number") tween("b-left", window.AVX.contract.maxSupply - d.minted);
+  });
 })();
