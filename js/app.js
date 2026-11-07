@@ -19,6 +19,7 @@
       const absorbed = toNum(absH), retired = toNum(retH);
       const alive = minted - absorbed - retired;
       if ($("b-minted")) $("b-minted").textContent = fmt(minted);
+      if ($("ascent-born")) $("ascent-born").textContent = fmt(minted);
       if ($("b-alive")) $("b-alive").textContent = fmt(alive);
       if ($("b-absorbed")) $("b-absorbed").textContent = fmt(absorbed);
       if ($("b-retired")) $("b-retired").textContent = fmt(retired);

@@ -331,6 +331,31 @@ section.gate { padding: 44px; }
   .stagebtn small { display: block; margin: 0 0 4px; }
 }
 
+/* ==== v10: SECTION ASCENT (karya sensus di halaman depan) ==== */
+.ascent { max-width: 1180px; margin: 30px auto 0; padding: 0 26px; }
+.ascent-fig { position: relative; margin: 0; border-radius: 26px; overflow: hidden; border: 1px solid var(--line); background: #05070F; }
+.ascent-fig img { display: block; width: 100%; height: auto; }
+.ascent-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 90px 40px 30px; background: linear-gradient(180deg, rgba(4,5,12,0) 0%, rgba(4,5,12,.72) 45%, rgba(4,5,12,.94) 100%); }
+.ascent-kicker { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .3em; color: var(--gold); }
+.ascent-cap h2 { font-family: "Fraunces", serif; font-weight: 550; font-size: clamp(32px, 4.6vw, 52px); line-height: 1.05; margin: 10px 0 12px; }
+.ascent-cap h2 em { color: var(--gold); font-style: italic; }
+.ascent-cap p { max-width: 620px; color: #C9CEE8; font-size: 15.5px; line-height: 1.65; margin: 0; }
+.ascent-stages { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0 16px; }
+.astage { display: flex; flex-direction: column; gap: 2px; border: 1px solid var(--line); border-radius: 14px; padding: 9px 14px; background: rgba(8,11,26,.55); backdrop-filter: blur(6px); }
+.astage b { font-size: 13.5px; letter-spacing: .04em; }
+.astage small { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .18em; color: var(--dim); }
+.astage.gold { border-color: rgba(255,197,61,.55); }
+.astage.gold b { color: var(--gold); }
+.ascent-count { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: .06em; color: var(--dim); }
+.ascent-count b { color: #fff; font-size: 15px; }
+@media (max-width: 820px) {
+  .ascent { padding: 0 14px; margin-top: 18px; }
+  .ascent-fig { border-radius: 20px; }
+  .ascent-cap { position: static; padding: 20px 18px 22px; background: #070A18; }
+  .ascent-cap p { font-size: 14.5px; }
+  .astage { padding: 8px 11px; border-radius: 12px; }
+}
+
 /* ==== v7: HALAMAN ROADMAP + DOCS ==== */
 .pagehead { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; padding: 20px 26px 6px; max-width: 1080px; margin: 0 auto; }
 .pagehead nav { display: flex; gap: 8px; flex-wrap: wrap; }
