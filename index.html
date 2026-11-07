@@ -6,7 +6,7 @@
 <title>AgentVerse X, Citizens that grow up alive in 3D</title>
 <meta name="description" content="AgentVerse X: living 3D constellation Citizens on BNB Chain. First Citizen free, they age on-chain, Ascendants retire into $VERSE."/>
 <link rel="icon" href="favicon.svg"/>
-<link rel="stylesheet" href="css/style.css?v=7"/>
+<link rel="stylesheet" href="css/style.css?v=9"/>
 </head>
 <body>
 <header class="site over">
@@ -337,7 +337,11 @@ function tick(){
   dust.material.opacity = cur.dust;
   dust.rotation.y = t*.03;
   // breathing drift, tenang dan konstan
-  citizen.position.set(isNarrow ? 0 : 2.6, Math.sin(t*.7)*.12 - (isNarrow ? 1.1 : 0), 0);
+  const bandMode = isNarrow && wrap.clientHeight < 430;
+  const targetZ = bandMode ? 10.2 : (isNarrow ? 13.5 : 9.2);
+  camera.position.z += (targetZ - camera.position.z) * .06;
+  const bandY = bandMode ? 0 : (isNarrow ? 1.1 : 0);
+  citizen.position.set(isNarrow ? 0 : 2.6, Math.sin(t*.7)*.12 - bandY, 0);
   citizen.rotation.y = Math.sin(t*.11)*.15;
   controls.update();
   composer.render();

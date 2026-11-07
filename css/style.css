@@ -367,3 +367,65 @@ section.gate::before { animation: none !important; opacity: .35; }
 .gate h2 em, .hero-copy h1 em { animation: none !important; }
 .btn:hover { transform: none; }
 .stagebtn:hover { transform: none; }
+
+/* ==== v8: MOBILE-FIRST RAPI ==== */
+@media (max-width: 860px) {
+  .strip { font-size: 9.5px; padding: 8px 10px; }
+  .hero-top { position: sticky; top: 0; z-index: 60; background: rgba(5,6,15,.86); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); padding: 12px 16px 11px; flex-direction: column; align-items: stretch; gap: 10px; }
+  .hero-top .brand { font-size: 15px; }
+  .hero-top .brand .logo { width: 30px; height: 30px; }
+  .hero-top nav { flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding-bottom: 2px; scrollbar-width: none; }
+  .hero-top nav::-webkit-scrollbar { display: none; }
+  .hero-top nav a { flex: 0 0 auto; padding: 9px 15px; font-size: 12px; }
+  #hero { display: flex; flex-direction: column; min-height: 0; padding: 0; overflow: visible; }
+  #scene { position: relative; inset: auto; height: 292px; order: 1; touch-action: pan-y; }
+  .hero-shade { display: none; }
+  .hero-inner { order: 2; display: block; padding: 2px 20px 0; }
+  .hero-copy .eyebrow { margin-top: 4px; }
+  .hero-copy h1 { font-size: 39px; line-height: 1.1; }
+  .hero-copy p { font-size: 14px; line-height: 1.65; }
+  .hero-side { margin-top: 16px; width: 100%; min-width: 0; }
+  .hstat .n { font-size: 27px; }
+  .stagebar { order: 3; position: static; margin: 16px 20px 20px; width: auto; }
+  .hint { display: none; }
+  main { padding-left: 12px; padding-right: 12px; }
+  section.gate { padding: 26px 20px 28px; border-radius: 22px; margin-top: 14px; }
+  .gate h2 { font-size: 32px; }
+  .gate p { font-size: 14px; }
+  .facts { display: block; padding: 4px 0; }
+  .fact { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 11px 0 9px; border-bottom: 1px solid rgba(255,255,255,.07); }
+  .fact:last-child { border-bottom: none; }
+  .fact .v { order: 2; font-size: 24px; white-space: nowrap; }
+  .fact .k { order: 1; margin-top: 0; }
+  .fact + .fact { border-left: none; padding-left: 0; }
+  .twocol { display: block; }
+  .twocol .checker { margin-top: 14px; padding: 16px; }
+  .twocol .checker input { width: 100%; }
+  .twocol .checker .btn { width: 100%; margin-top: 10px; }
+  .promptbox { padding: 16px; }
+  .promptbox .ptext { font-size: 12.5px; line-height: 1.65; }
+  .tm, .rc { padding: 18px; }
+  footer.site { padding: 24px 20px 36px; }
+  .pagehead { position: sticky; top: 0; z-index: 60; background: rgba(5,6,15,.86); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); padding: 12px 16px 11px; }
+  .pagehead nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .pagehead nav::-webkit-scrollbar { display: none; }
+  .pagehead nav a { flex: 0 0 auto; }
+}
+
+/* ==== v9: KOREKSI STRUKTUR HEADER MOBILE ==== */
+@media (max-width: 860px) {
+  header.site.over { position: sticky; top: 0; z-index: 60; background: rgba(5,6,15,.88); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); padding: 12px 16px 11px; flex-direction: column; align-items: stretch; gap: 10px; flex-wrap: nowrap; }
+  header.site .brand { font-size: 15px; }
+  header.site .brand .logo { width: 30px; height: 30px; }
+  header.site nav { flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding-bottom: 2px; scrollbar-width: none; }
+  header.site nav::-webkit-scrollbar { display: none; }
+  header.site nav a { flex: 0 0 auto; padding: 9px 15px; font-size: 12px; }
+  .hero-top { position: relative; top: auto; z-index: auto; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: none; order: 2; flex-direction: column; align-items: stretch; gap: 0; padding: 12px 20px 0; }
+  .hero-copy { max-width: none; }
+  .hero-side { margin-top: 18px; }
+}
+
+/* ==== v9b: tepi nav memudar, isyarat bisa digeser ==== */
+@media (max-width: 860px) {
+  header.site nav, .pagehead nav { -webkit-mask-image: linear-gradient(90deg, #000 93%, transparent); mask-image: linear-gradient(90deg, #000 93%, transparent); }
+}
